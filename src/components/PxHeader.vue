@@ -11,7 +11,15 @@
         <div
           class="hidden sm:block w-full block flex-grow lg:flex lg:items-center lg:w-auto"
         >
-          <div class="text-sm lg:flex-grow"></div>
+          <div class="text-sm lg:flex-grow">
+            <router-link
+              v-for="l in links"
+              :key="l.link"
+              :to="l.to"
+              class="block mt-4 lg:inline-block lg:mt-o text-teal-300 hover:text-white mr-4"
+              >{{ l.title }}
+            </router-link>
+          </div>
         </div>
       </nav>
     </nav>
@@ -22,6 +30,13 @@ import pxIcon from "@/components/PxIcon";
 
 export default {
   name: "pxHeader",
+  props: {
+    links: {
+      type: Array,
+      default: () => []
+    }
+  },
+
   components: { pxIcon }
 };
 </script>
