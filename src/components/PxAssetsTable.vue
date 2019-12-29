@@ -15,32 +15,60 @@
     </thead>
     <tbody>
       <tr
-        v-for ="a in assets"
-        :key = "a.id"
+        v-for="a in assets"
+        :key="a.id"
         class="border-b border-gray-200 hover:bg-gray-100 hover:bg-orange-100"
       >
         <td class="w-6 h-6">
-          <img :src="`https://static.coincap.io/assets/icons/${a.symbol.toLowerCase()}@2x.png`" :alt="a.name">
+          <img
+            :src="
+              `https://static.coincap.io/assets/icons/${a.symbol.toLowerCase()}@2x.png`
+            "
+            :alt="a.name"
+          />
         </td>
-        <td><b># {{a.rank}}</b></td>
-        <td>{{a.name}}</td>
-        <td>{{a.priceUsd | dolar}}</td>
-        <td>{{a.marketCapUsd | dolar}}</td>
-        <td :class="a.changePercent24Hr.includes('-')?'text-red-600':'text-green-600'">
-          {{a.changePercent24Hr | percent}}
+        <td>
+          <b># {{ a.rank }}</b>
         </td>
-        <td class="hidden sm:block"></td>
+        <router-link :to="{name:'coin-detail', params:{id:a.id}}" class="hover:underline text-green-600">
+          <td>{{ a.name }}</td>
+        </router-link>
+        <small class="ml-1 text-gray-500">{{a.symbol}}</small>
+        
+        <td>{{ a.priceUsd | dolar }}</td>
+        <td>{{ a.marketCapUsd | dolar }}</td>
+        <td
+          :class="
+            a.changePercent24Hr.includes('-')
+              ? 'text-red-600'
+              : 'text-green-600'
+          "
+        >
+          {{ a.changePercent24Hr | percent }}
+        </td>
+        <td class="hidden sm:block">
+          <px-button @custom-click="goToCoin(a.id)">
+            <span>Detalle</span>
+          </px-button>
+        </td>
       </tr>
     </tbody>
   </table>
 </template>
 <script>
+import PxButton from '@/components/PxButton'
 export default {
   name: "PxAssestsTable",
+  components:{PxButton},
   props: {
     assets: {
       type: Array,
       default: () => []
+    }
+  },
+  methods:{
+    goToCoin(id){
+      this.$router.push({name:'coin-detail', params:{id}})
     }
   }
 };
