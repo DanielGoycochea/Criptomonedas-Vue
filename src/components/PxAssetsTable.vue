@@ -3,22 +3,22 @@
     <thead>
       <tr class="bg-gray-100 border-b-2 border-gray-400">
         <th></th>
-        <th :class="{up:this.sortOrder === 1, down:this.sortOrder===-1}">
-          <span
-          class="undeline cursor-pointer"
-          @click = "changeSortOrder">Ranking</span>
+        <th :class="{ up: this.sortOrder === 1, down: this.sortOrder === -1 }">
+          <span class="undeline cursor-pointer" @click="changeSortOrder"
+            >Ranking</span
+          >
         </th>
         <th>Nombre</th>
         <th>Precio</th>
         <th>Cap. de Mercado</th>
         <th>Variación 24hs</th>
         <td class="hidden sm:block">
-          <input 
-          class="bg-gray-100 focus:outline-none border-b border-gray-400 py-2"
-          id="filter"
-          placeholder="Buscar..."
-          type="text"
-          v-model="filter"
+          <input
+            class="bg-gray-100 focus:outline-none border-b border-gray-400 py-2"
+            id="filter"
+            placeholder="Buscar..."
+            type="text"
+            v-model="filter"
           />
         </td>
       </tr>
@@ -29,7 +29,7 @@
         :key="a.id"
         class="border-b border-gray-200 hover:bg-gray-100 hover:bg-orange-100"
       >
-        <td class="w-6 h-6">
+        <td class="h-3" style="width: 99px;">
           <img
             :src="
               `https://static.coincap.io/assets/icons/${a.symbol.toLowerCase()}@2x.png`
@@ -40,11 +40,14 @@
         <td>
           <b># {{ a.rank }}</b>
         </td>
-        <router-link :to="{name:'coin-detail', params:{id:a.id}}" class="hover:underline text-green-600">
+        <router-link
+          :to="{ name: 'coin-detail', params: { id: a.id } }"
+          class="hover:underline text-green-600"
+        >
           <td>{{ a.name }}</td>
         </router-link>
-        <small class="ml-1 text-gray-500">{{a.symbol}}</small>
-        
+        <small class="ml-1 text-gray-500">{{ a.symbol }}</small>
+
         <td>{{ a.priceUsd | dolar }}</td>
         <td>{{ a.marketCapUsd | dolar }}</td>
         <td
@@ -66,46 +69,45 @@
   </table>
 </template>
 <script>
-import PxButton from '@/components/PxButton'
+import PxButton from "@/components/PxButton";
 export default {
   name: "PxAssestsTable",
-  components:{PxButton},
+  components: { PxButton },
   props: {
     assets: {
       type: Array,
       default: () => []
     }
   },
-  data(){
-    return{
-      filter:'',
+  data() {
+    return {
+      filter: "",
       sortOrder: 1
-    }
+    };
   },
-  computed:{
-    filterAssets(){
-      
-      const altOrder = this.sortOrder=== 1?-1:1
-      return this.assets.filter(
-        a=> 
-        a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
-        a.name.toLowerCase().includes(this.filter.toLowerCase())
-        
+  computed: {
+    filterAssets() {
+      const altOrder = this.sortOrder === 1 ? -1 : 1;
+      return this.assets
+        .filter(
+          a =>
+            a.symbol.toLowerCase().includes(this.filter.toLowerCase()) ||
+            a.name.toLowerCase().includes(this.filter.toLowerCase())
         )
-        .sort((a,b)=>{
-          if(parseInt(a.rank)> parseInt(b.rank)){
-            return this.sortOrder
+        .sort((a, b) => {
+          if (parseInt(a.rank) > parseInt(b.rank)) {
+            return this.sortOrder;
           }
-          return altOrder
-        })
+          return altOrder;
+        });
     }
   },
-  methods:{
-    goToCoin(id){
-      this.$router.push({name:'coin-detail', params:{id}})
+  methods: {
+    goToCoin(id) {
+      this.$router.push({ name: "coin-detail", params: { id } });
     },
-    changeSortOrder(){
-      this.sortOrder= this.sortOrder===1? -1:1
+    changeSortOrder() {
+      this.sortOrder = this.sortOrder === 1 ? -1 : 1;
     }
   }
 };
